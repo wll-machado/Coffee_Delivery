@@ -4,10 +4,31 @@ import delivery from '../../assets/Illustration.svg'
 import { MapPin, Clock, CurrencyDollar } from "phosphor-react"
 import { useTheme } from "styled-components"
 import Info from "../../Components/InfoWithIcon"
+import { useLocation, useNavigate } from "react-router-dom"
+import { OrderData } from "../CompleteOrder"
+import { paymentMethods } from "../CompleteOrder/components/CompleteOrderForm/PaymentMethodOptions"
+import { useEffect } from "react"
 
+
+interface LocationType {
+  state: OrderData
+}
 function OrderConfirmed() {
 
+    const {state} = useLocation() as unknown as LocationType
+
     const {colors} = useTheme()
+
+    const navigate = useNavigate()
+    useEffect(() => {
+      if(!state) {
+        navigate("/")      }
+    }, [])
+
+    if(!state) {
+        return <></>
+    }
+
   return (
     <OrderConfirmedContainer className="container">
       <div>
@@ -22,8 +43,8 @@ function OrderConfirmed() {
             <Info icon={<MapPin weight="fill" />} 
             text={
                 <RegularText>
-                    Entrega em <strong> Rua João Daniel Martinelli, 226</strong> <br />
-                    Niteroi - Rio de Janeiro, RJ
+                    Entrega em <strong> {state.street} , {state.number} </strong> <br />
+                    {state.district} - {state.city}, {state.uf}
                 </RegularText>
             } 
             iconBg={colors["brand-purple"]}/>
@@ -41,7 +62,7 @@ function OrderConfirmed() {
             text={
                 <RegularText>
                     Pagamento na entrega <br />
-                    <strong>Cartão de crédito</strong>
+                    <strong>{paymentMethods[state.paymentMethod].label}</strong>
                 </RegularText>
             } 
             iconBg={colors["brand-yellow"]}/>

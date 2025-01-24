@@ -3,6 +3,7 @@ import Intro from "./components/intro"
 import { HomeContainer } from "./styles"
 
 function Home() {
+ 
   return (
     <HomeContainer>
         <Intro />
